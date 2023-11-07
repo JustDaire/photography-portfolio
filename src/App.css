@@ -4,8 +4,12 @@
 
 body {
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 0;
+}
+
+.no-scroll {
+  overflow: hidden;
 }
 
 header {
