@@ -32,6 +32,10 @@ const navItems = [
     label: 'Contact',
     link: '/contact',
   },
+  {
+    label: 'Admin',
+    link: '/admin',
+  },
 ];
 
 function Header() {
