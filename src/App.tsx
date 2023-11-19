@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header'
@@ -13,7 +14,9 @@ function App() {
         <Header />
         <div className='main'>
         <Routes>
-          <Route exact path='/' element={<Home />} />
+          <Route path='/' element={<Home />} />
+          {/* TODO: Fix exact */}
+          {/* <Route exact path='/' element={<Home />} /> */}
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
         </Routes>
