@@ -54,8 +54,7 @@ function Header() {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-
+            <Nav className="me-auto site-navigation">
               {navItems.map(item => (
                 <Nav.Link><Link to={item.link} className="nav-link">{item.label.toUpperCase()}</Link></Nav.Link>
                 // <Link to={'/'} className="nav-link">Home</Link>
