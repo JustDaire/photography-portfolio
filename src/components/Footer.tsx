@@ -1,6 +1,6 @@
-import React from 'react';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import React from "react";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
 function Footer() {
   return (
@@ -8,7 +8,9 @@ function Footer() {
       <Navbar expand="lg" className="footer" fixed="bottom">
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text className='credits'>©2022 Daire Hardesty | All Rights Reserved</Navbar.Text>
+          <Navbar.Text className="credits">
+            ©2022 Daire Hardesty | All Rights Reserved
+          </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>
     </>
