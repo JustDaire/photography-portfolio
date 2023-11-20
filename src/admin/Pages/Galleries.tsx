@@ -1,30 +1,17 @@
-import React, { Component, useState } from 'react';
-
-function Upload() {
-  const [file, setFile] = useState(null);
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setFile(file);
-  };
-  return (
-    <div className="App">
-      <div>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={uploadFile}>Upload</button>
-      </div>
-    </div>
-  );
-}
-
-const uploadFile = async () => {
-}
+import React, { Component } from 'react';
+import S3Uploader from '../../utils/S3Uploader';
+// import BucketList from '../../utils/S3Reader';
+import GetFile from '../../utils/S3Reader';
 
 class Galleries extends Component {
   render() {
     return (
-        <div>
-          <h2>Galleries</h2>
-        </div>
+      <div>
+        <h2>Galleries</h2>
+        <S3Uploader />
+        <GetFile prefix={'daire-hardesty-logo'} />
+        {/* <BucketList /> */}
+      </div>
     );
   }
 }
