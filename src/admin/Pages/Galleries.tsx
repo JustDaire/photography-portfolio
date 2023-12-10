@@ -4,6 +4,9 @@ import S3Uploader from '../../utils/S3Uploader';
 import GetFile from '../../utils/S3Reader';
 import Card from 'react-bootstrap/esm/Card';
 import Button from 'react-bootstrap/esm/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/esm/Form';
+
 function GalleryList() {
   const [isHovering, setIsHovering] = useState(false);
 
@@ -40,7 +43,7 @@ function GalleryList() {
               onMouseOut={handleMouseOut}
               >
               {isHovering && (
-                <span className='card-edit'>Edit</span>
+                <GalleryEdit data={gallery} />
               )}
               {/* <Card.Img variant="top" src="https://picsum.photos/300/180/?blur" /> */}
               <Card.Img variant="top" src="http://satyr.dev/300x180" />
@@ -60,6 +63,49 @@ function GalleryList() {
     </>
   )
 }
+
+function GalleryEdit(data: any) {
+  console.log('Data:', data)
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      {/* <Button variant="primary" onClick={handleShow}>
+        Edit
+      </Button> */}
+      <span className='card-edit' onClick={handleShow}>Edit</span>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Gallery</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text" value={data.data.title} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control as="textarea" rows={3}  value={data.data.description}/>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
 class Galleries extends Component {
   render() {
     return (
