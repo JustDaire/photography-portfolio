@@ -47,17 +47,15 @@ function Sidebar() {
           <div className="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
             <ul className="nav flex-column">
               {navItems.map(item => (
-                <>
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link d-flex align-items-center gap-2 active"
-                      to={item.link}
-                    >
-                      {/* <FontAwesomeIcon icon={navItems[i].icon} fixedWidth /> */}
-                      {item.label}
-                    </Link>
-                  </li>
-                </>
+                <li className="nav-item" key={item.label}>
+                  <Link
+                    className="nav-link d-flex align-items-center gap-2 active"
+                    to={item.link}
+                  >
+                    {/* <FontAwesomeIcon icon={navItems[i].icon} fixedWidth /> */}
+                    {item.label}
+                  </Link>
+                </li>
               ))}
             </ul>
 
