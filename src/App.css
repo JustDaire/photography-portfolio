@@ -85,3 +85,10 @@ header {
   /* background: url(./images/slash.png) no-repeat; */
   margin: -3px 0 0 -20px;
 }
+
+.card-edit {
+  position: absolute;
+  right: 0;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}

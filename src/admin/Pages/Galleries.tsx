@@ -5,6 +5,15 @@ import GetFile from '../../utils/S3Reader';
 import Card from 'react-bootstrap/esm/Card';
 import Button from 'react-bootstrap/esm/Button';
 function GalleryList() {
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
 
   const [galleries, setGalleries] = useState<any[]>([])
   const fetchGalleryData = () => {
@@ -27,7 +36,12 @@ function GalleryList() {
         <div>
           {galleries.map(gallery => (
             <Card className='gallery-image' key={gallery.id} style={{ width: '18rem' }}
+              onMouseOver={handleMouseOver}
+              onMouseOut={handleMouseOut}
               >
+              {isHovering && (
+                <span className='card-edit'>Edit</span>
+              )}
               {/* <Card.Img variant="top" src="https://picsum.photos/300/180/?blur" /> */}
               <Card.Img variant="top" src="http://satyr.dev/300x180" />
               {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
