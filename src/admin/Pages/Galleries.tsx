@@ -86,6 +86,31 @@ function GalleryEdit(data: any) {
     });
   };
 
+  // @ts-ignore
+  const galleryUpdate = () => {
+    console.log('Data:', formData)
+    // sending PATCH request with fetch API in javascript
+    fetch("http://localhost:3000/galleries", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+
+      // Fields that to be updated are passed
+      body: JSON.stringify({
+        title: formData.title
+      })
+    })
+      .then(function (response) {
+        console.log('response', response.json());
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+  };
+
   if (show) {
     console.log('Data:', data)
     console.log('formData:', formData)
@@ -117,7 +142,7 @@ function GalleryEdit(data: any) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={galleryUpdate}>
             Save Changes
           </Button>
         </Modal.Footer>
