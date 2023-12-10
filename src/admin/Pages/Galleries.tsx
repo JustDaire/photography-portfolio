@@ -35,6 +35,9 @@ function GalleryList() {
   }, [])
   return (
     <>
+      <Button variant="outline-dark">New</Button>{' '}
+      <br />
+      <br />
       {galleries.length > 0 && (
         <div>
           {galleries.map(gallery => (
