@@ -44,7 +44,7 @@ function GalleryList() {
             <Card className='gallery-image' key={gallery.id} style={{ width: '18rem' }}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
-              >
+            >
               {isHovering && (
                 <GalleryEdit data={gallery} />
               )}
