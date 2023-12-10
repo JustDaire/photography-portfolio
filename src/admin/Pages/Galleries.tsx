@@ -68,7 +68,6 @@ function GalleryList() {
 }
 
 function GalleryEdit(data: any) {
-  console.log('Data:', data)
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
