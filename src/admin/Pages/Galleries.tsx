@@ -74,6 +74,24 @@ function GalleryEdit(data: any) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [formData, setFormData] = useState({
+    title: data.data.title,
+    description: ''
+  })
+
+  // @ts-ignore
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.title]: e.target.description
+    });
+  };
+
+  if (show) {
+    console.log('Data:', data)
+    console.log('formData:', formData)
+  }
+
   return (
     <>
       {/* <Button variant="primary" onClick={handleShow}>
@@ -88,11 +106,11 @@ function GalleryEdit(data: any) {
           <Form>
             <Form.Group className="mb-3" controlId="galleryEditForm.GalleryTitle">
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" value={data.data.title} />
+              <Form.Control type="text" onChange={handleChange} value={formData.title} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="galleryEditForm.GalleryDescription">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" rows={3}  value={data.data.description}/>
+              <Form.Control as="textarea" rows={3} onChange={handleChange} value={data.data.description} />
             </Form.Group>
           </Form>
         </Modal.Body>
