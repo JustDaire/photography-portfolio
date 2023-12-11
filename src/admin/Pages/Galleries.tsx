@@ -96,11 +96,11 @@ function GalleryCreate() {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryTitle">
+            <Form.Group className="mb-3" controlId="galleryCreateForm.GalleryTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control type="text" onChange={handleChange} value={formData.title} />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryDescription">
+            <Form.Group className="mb-3" controlId="galleryCreateForm.GalleryDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control as="textarea" rows={3} onChange={handleChange} value={formData.description} />
             </Form.Group>
@@ -127,14 +127,23 @@ function GalleryEdit(data: any) {
 
   const [formData, setFormData] = useState({
     title: data.data.title,
-    description: ''
+    description: data.data.description || ''
   })
+
+  // @ts-ignore
+  const handleTitleChange = (e) => {
+    console.log('e', e);
+    setFormData({
+      ...formData,
+      title: e.target.value
+    })
+  }
 
   // @ts-ignore
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.title]: e.target.description
+      description: e.target.value
     });
   };
 
@@ -142,7 +151,7 @@ function GalleryEdit(data: any) {
   const galleryUpdate = () => {
     console.log('Data:', formData)
     // sending PATCH request with fetch API in javascript
-    fetch("http://localhost:3000/galleries", {
+    fetch(`http://localhost:3000/galleries?id=eq.${data.data.id}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -151,15 +160,18 @@ function GalleryEdit(data: any) {
 
       // Fields that to be updated are passed
       body: JSON.stringify({
-        title: formData.title
+        title: formData.title,
+        description: formData.description
       })
     })
       .then(function (response) {
-        console.log('response', response.json());
-        return response.json();
+        // console.log('response', response);
+        // console.log('response', response.json());
+        return response;
       })
       .then(function (data) {
         console.log(data);
+        handleClose();
       });
   };
 
@@ -182,11 +194,11 @@ function GalleryEdit(data: any) {
           <Form>
             <Form.Group className="mb-3" controlId="galleryEditForm.GalleryTitle">
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" onChange={handleChange} value={formData.title} />
+              <Form.Control type="text" onChange={handleTitleChange} value={formData.title} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="galleryEditForm.GalleryDescription">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" rows={3} onChange={handleChange} value={data.data.description} />
+              <Form.Control as="textarea" rows={3} onChange={handleChange} value={formData.description} />
             </Form.Group>
           </Form>
         </Modal.Body>
