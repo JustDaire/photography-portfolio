@@ -10,7 +10,7 @@ class AdminLayout extends Component {
         <Toolbar />
         <div className="row m-0 mt-5">
           <Sidebar />
-          <div className="col-md-9 col-lg-10 mt-3">
+          <div className="admin-main col-md-9 col-lg-10 mt-3">
             <Outlet />
           </div>
         </div>

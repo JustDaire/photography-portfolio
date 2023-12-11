@@ -92,3 +92,22 @@ header {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
+
+/* Admin */
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  z-index: 1000;
+  height: 100%;
+  background-color: #222838;
+}
+/* #222838 */
+
+.sidebar .nav-link {
+  color: #fff;
+}
+
+.admin-main {
+  margin-left: auto;
+}
