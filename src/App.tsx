@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import AdminLayout from './pages/AdminLayout';
 import Dashboard from './admin/Pages/Dashboard';
 import Galleries from './admin/Pages/Galleries';
+import Media from './admin/Pages/Media';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="galleries" element={<Galleries />} >
               <Route path="edit" element={<Galleries />} />
             </Route>
+            <Route path="media" element={<Media />} />
             {/* <Route path="report-stocks" element={<ReportStocks />} /> */}
             {/* <Route path="*" element={<NoPage />} /> */}
           </Route>

@@ -15,6 +15,12 @@ const navItems = [
     disabled: false,
   },
   {
+    label: 'Media',
+    icon: 'cart-shopping',
+    link: 'media',
+    disabled: false,
+  },
+  {
     label: 'Products',
     icon: 'tag',
     link: '/',
