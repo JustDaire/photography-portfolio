@@ -23,7 +23,9 @@ function App() {
           </Route>
           <Route path="/admin/" element={<AdminLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="galleries" element={<Galleries />} />
+            <Route path="galleries" element={<Galleries />} >
+              <Route path="edit" element={<Galleries />} />
+            </Route>
             {/* <Route path="report-stocks" element={<ReportStocks />} /> */}
             {/* <Route path="*" element={<NoPage />} /> */}
           </Route>

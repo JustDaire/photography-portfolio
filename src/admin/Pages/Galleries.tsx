@@ -6,6 +6,10 @@ import Card from 'react-bootstrap/esm/Card';
 import Button from 'react-bootstrap/esm/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/esm/Form';
+import GalleryUpdate from './GalleryUpdate';
+import { Link } from 'react-router-dom';
+import Row from 'react-bootstrap/esm/Row';
+import { Col } from 'react-bootstrap';
 
 function GalleryList() {
   const [isHovering, setIsHovering] = useState(false);
@@ -19,6 +23,7 @@ function GalleryList() {
   };
 
   const [galleries, setGalleries] = useState<any[]>([])
+
   const fetchGalleryData = () => {
     fetch("http://localhost:3000/galleries")
       .then(response => {
@@ -33,32 +38,39 @@ function GalleryList() {
   useEffect(() => {
     fetchGalleryData()
   }, [])
+
   return (
     <>
       {galleries.length > 0 && (
-        <div>
-          {galleries.map(gallery => (
-            <Card className='gallery-image' key={gallery.id} style={{ width: '18rem' }}
-              onMouseOver={handleMouseOver}
-              onMouseOut={handleMouseOut}
-            >
-              {isHovering && (
-                <GalleryEdit data={gallery} />
-              )}
-              {/* <Card.Img variant="top" src="https://picsum.photos/300/180/?blur" /> */}
-              <Card.Img variant="top" src="http://satyr.dev/300x180" />
-              {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-              <Card.Body>
-                <Card.Title>{gallery.title}</Card.Title>¸
-                <Card.Text>
-                  Gallery Description
-                  bulk of the card's content.
-                </Card.Text>
-                <Button variant="primary">View</Button>
-              </Card.Body>
-            </Card>
+        <Row xs={4} md={3} className="g-4">
+          {galleries.map((gallery, idx) => (
+            <Col key={idx}>
+              <Card className='gallery-image' key={gallery.id} style={{ width: '18rem' }}
+                onMouseOver={handleMouseOver}
+                onMouseOut={handleMouseOut}
+              >
+                {isHovering && (
+                  // <Link className="card-edit" to={'edit'}>Edit</Link>
+                  // <span className='card-edit' onClick={GalleryUpdate}>Edit</span>
+                  <GalleryEdit data={gallery} />
+                )}
+                {/* <Card.Img variant="top" src="https://picsum.photos/300/180/?blur" /> */}
+                <Card.Img variant="top" src="http://satyr.dev/300x180" />
+                {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                <Card.Body>
+                  <Card.Title>{gallery.title}</Card.Title>¸
+                  <Card.Text>
+                    Gallery Description
+                    bulk of the card's content.
+                  </Card.Text>
+                  <Button variant="primary">View</Button>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
+        </Row>
+        // <div className='row'>
+        // </div>
       )}
     </>
   )
@@ -76,15 +88,48 @@ function GalleryCreate() {
   })
 
   // @ts-ignore
+  const handleTitleChange = (e) => {
+    setFormData({
+      ...formData,
+      title: e.target.value
+    })
+  }
+
+  // @ts-ignore
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.title]: e.target.description
+      description: e.target.value
     });
   };
 
   const galleryCreate = () => {
-    handleClose();
+    console.log('Data:', formData)
+    // sending PATCH request with fetch API in javascript
+    fetch(`http://localhost:3000/galleries`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+
+      // Fields that to be updated are passed
+      body: JSON.stringify({
+        title: formData.title,
+        description: formData.description
+      })
+    })
+      .then(function (response) {
+        // console.log('response', response);
+        // console.log('response', response.json());
+        return response;
+      })
+      .then(function (data) {
+        console.log(data);
+        handleClose();
+        GalleryList();
+      });
+    // handleClose();
   }
 
   return (
@@ -98,7 +143,7 @@ function GalleryCreate() {
           <Form>
             <Form.Group className="mb-3" controlId="galleryCreateForm.GalleryTitle">
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" onChange={handleChange} value={formData.title} />
+              <Form.Control type="text" onChange={handleTitleChange} value={formData.title} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="galleryCreateForm.GalleryDescription">
               <Form.Label>Description</Form.Label>
@@ -132,7 +177,6 @@ function GalleryEdit(data: any) {
 
   // @ts-ignore
   const handleTitleChange = (e) => {
-    console.log('e', e);
     setFormData({
       ...formData,
       title: e.target.value
@@ -172,6 +216,7 @@ function GalleryEdit(data: any) {
       .then(function (data) {
         console.log(data);
         handleClose();
+        GalleryList();
       });
   };
 
@@ -186,7 +231,7 @@ function GalleryEdit(data: any) {
         Edit
       </Button> */}
       <span className='card-edit' onClick={handleShow}>Edit</span>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>Update Gallery</Modal.Title>
         </Modal.Header>
