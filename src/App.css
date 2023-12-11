@@ -18,7 +18,7 @@ header {
   z-index: 100;
   display: flex;
   align-items: center;
-  font-family: 'Anonymous Pro', monospace;
+  font-family: "Anonymous Pro", monospace;
 }
 
 .logo-container {
@@ -69,12 +69,12 @@ header {
 }
 
 .credits {
-  font-family: 'Anonymous Pro', monospace;
+  font-family: "Anonymous Pro", monospace;
   font-size: 12px;
 }
 
 .credits:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   height: 55%;
