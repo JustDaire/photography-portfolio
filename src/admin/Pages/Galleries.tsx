@@ -35,9 +35,6 @@ function GalleryList() {
   }, [])
   return (
     <>
-      <Button variant="outline-dark">New</Button>{' '}
-      <br />
-      <br />
       {galleries.length > 0 && (
         <div>
           {galleries.map(gallery => (
@@ -65,6 +62,61 @@ function GalleryList() {
       )}
     </>
   )
+}
+
+function GalleryCreate() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [formData, setFormData] = useState({
+    title: '',
+    description: ''
+  })
+
+  // @ts-ignore
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.title]: e.target.description
+    });
+  };
+
+  const galleryCreate = () => {
+    handleClose();
+  }
+
+  return (
+    <>
+      <Button variant="outline-dark" onClick={handleShow}>New</Button>{' '}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create Gallery</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text" onChange={handleChange} value={formData.title} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="galleryEditForm.GalleryDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control as="textarea" rows={3} onChange={handleChange} value={formData.description} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={galleryCreate}>
+            Create
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 function GalleryEdit(data: any) {
@@ -154,13 +206,16 @@ function GalleryEdit(data: any) {
 class Galleries extends Component {
   render() {
     return (
-      <div>
+      <>
         <h2>Galleries</h2>
+        <GalleryCreate />
+        <br />
+        <br />
         <GalleryList />
         {/* <S3Uploader /> */}
         {/* <GetFile prefix={'daire-hardesty-logo'} /> */}
         {/* <BucketList /> */}
-      </div>
+      </>
     );
   }
 }
