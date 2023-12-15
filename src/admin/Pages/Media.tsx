@@ -30,6 +30,41 @@ const FileUpload = () => {
 	);
 };
 
+function MediaView() {
+	// const { loading, data } = UseFetchData();
+	// GetFiles();
+	// const response = GetFiles();
+	const { loading, data, url } = GetFilesTest();
+	// console.log(response)
+
+	// getFeatures().then(x => {
+	// 	console.log('Files:', x);
+	// 	// do something else
+	// });
+
+	if (loading) {
+		return <p>Loading... </p>
+	} else {
+		console.log('Files:', data);
+	}
+
+	return (
+		<>
+			<h2>Media</h2>
+
+			<div className="row no-gutters">
+				{data.map((item: any, index: number) => (
+					<div className="col-sm-4" key={index}>
+					<div className="media-thumbnail">
+						<Image src={url + item.Key} className={'img-fluid'} fluid thumbnail/>
+					</div>
+					</div>
+				))}
+			</div>
+		</>
+	);
+}
+
 function MediaNew() {
 	const [show, setShow] = useState(false);
 
@@ -64,6 +99,7 @@ class Media extends Component {
 			<>
 				<h2>Media</h2>
 				<MediaNew />
+				<MediaView />
 			</>
 		);
 	}
