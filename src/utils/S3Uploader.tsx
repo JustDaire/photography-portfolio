@@ -14,7 +14,6 @@ const myBucket = new AWS.S3({
 })
 
 const S3Uploader = () => {
-
   // Progress
   const [progress, setProgress] = useState(0);
   // File handling
@@ -35,10 +34,11 @@ const S3Uploader = () => {
 
     myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
+        console.log(evt);
         setProgress(Math.round((evt.loaded / evt.total) * 100))
       })
       .send((err) => {
-        if (err) console.log(err)
+        if (err) console.log('Error:', err)
       })
   }
   return (
