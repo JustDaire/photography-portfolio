@@ -13,13 +13,16 @@ import { Col } from 'react-bootstrap';
 
 function GalleryList() {
   const [isHovering, setIsHovering] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
-  const handleMouseOver = () => {
+  const handleMouseOver = (index: any) => () => {
     setIsHovering(true);
+    setSelectedItemIndex(index);
   };
 
   const handleMouseOut = () => {
     setIsHovering(false);
+    setSelectedItemIndex(null);
   };
 
   const [galleries, setGalleries] = useState<any[]>([])
@@ -46,10 +49,10 @@ function GalleryList() {
           {galleries.map((gallery, idx) => (
             <Col key={idx}>
               <Card className='gallery-image' key={gallery.id} style={{ width: '18rem' }}
-                onMouseOver={handleMouseOver}
+                onMouseOver={handleMouseOver(idx)}
                 onMouseOut={handleMouseOut}
               >
-                {isHovering && (
+                {isHovering && selectedItemIndex == idx && (
                   // <Link className="card-edit" to={'edit'}>Edit</Link>
                   // <span className='card-edit' onClick={GalleryUpdate}>Edit</span>
                   <GalleryEdit data={gallery} />
@@ -69,8 +72,6 @@ function GalleryList() {
             </Col>
           ))}
         </Row>
-        // <div className='row'>
-        // </div>
       )}
     </>
   )
@@ -165,6 +166,7 @@ function GalleryCreate() {
 }
 
 function GalleryEdit(data: any) {
+  const id = data.data.id;
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -175,6 +177,7 @@ function GalleryEdit(data: any) {
     description: data.data.description || ''
   })
 
+  // TODO: merge
   // @ts-ignore
   const handleTitleChange = (e) => {
     setFormData({
@@ -195,7 +198,7 @@ function GalleryEdit(data: any) {
   const galleryUpdate = () => {
     console.log('Data:', formData)
     // sending PATCH request with fetch API in javascript
-    fetch(`http://localhost:3000/galleries?id=eq.${data.data.id}`, {
+    fetch(`http://localhost:3000/galleries?id=eq.${id}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -248,6 +251,7 @@ function GalleryEdit(data: any) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          <DeleteButton props={{handleClose, id}} />
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
@@ -256,6 +260,45 @@ function GalleryEdit(data: any) {
           </Button>
         </Modal.Footer>
       </Modal>
+    </>
+  );
+}
+
+function DeleteButton(props: any) {
+  console.log('props', props);
+  const [text, setText] = useState("Delete");
+  const deleteGallery = () => {
+    const requireConfirm = () => {
+      setText("Are you sure?");
+    }
+    const processDeletion = () => {
+      console.log('Deleting');
+
+      fetch(`http://localhost:3000/galleries?id=eq.${props.props.id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "DELETE"
+      })
+        .then(function (response) {
+          // console.log('response', response);
+          // console.log('response', response.json());
+          return response;
+        })
+        .then(function (data) {
+          console.log(data);
+          props.props.handleClose();
+          GalleryList();
+        });
+    }
+    text == 'Delete' ? requireConfirm() : processDeletion();
+  };
+  return (
+    <>
+      <Button variant="danger" className="me-auto" onClick={deleteGallery}>
+        {text}
+      </Button>
     </>
   );
 }
