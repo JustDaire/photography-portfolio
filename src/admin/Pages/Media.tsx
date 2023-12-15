@@ -1,7 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
+import Spinner from "react-bootstrap/esm/Spinner";
 import { useDropzone } from 'react-dropzone';
+import { GetFiles, GetFilesTest, S3UploadFiles, S3Uploader } from '../../utils/S3Bridge'
+import Image from 'react-bootstrap/Image';
 
 const FileUpload = () => {
 	const [uploadedFiles, setUploadedFiles] = useState<any>([]);
@@ -67,9 +70,52 @@ function MediaView() {
 
 function MediaNew() {
 	const [show, setShow] = useState(false);
+	const [isLoading, setLoading] = useState(false);
+
+	useEffect(() => {
+		function simulateNetworkRequest() {
+			return new Promise((resolve) => setTimeout(resolve, 5000));
+		}
+
+		if (isLoading) {
+			simulateNetworkRequest().then(() => {
+				setLoading(false);
+			});
+		}
+	}, [isLoading]);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	const handleClick = () => setLoading(true);
+
+	const [uploadedFiles, setUploadedFiles] = useState<any>([]);
+	const { getRootProps, getInputProps } = useDropzone({
+		onDrop: (acceptedFiles) => {
+			console.log('File:', acceptedFiles);
+			setUploadedFiles(acceptedFiles);
+			// Call your backend API endpoint to upload files
+		}
+	});
+
+	const UploadFiles = () => {
+		// setLoading(true);
+		handleClick();
+		const { loading, progress } = S3UploadFiles(uploadedFiles);
+		console.log('uploadedFiles:', uploadedFiles);
+
+		if (loading) {
+			return <p>Loading... </p>
+		} else {
+			console.log('Files:', progress);
+		}
+		if (!isLoading) {
+			setTimeout(() => {
+				console.log('Upload succeeded');
+				handleClose();
+			}, 3000);
+		}
+	};
 	return (
 		<>
 			<Button variant="outline-dark" onClick={handleShow}>New</Button>{' '}
@@ -78,14 +124,29 @@ function MediaNew() {
 					<Modal.Title>Upload media</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<FileUpload />
+					<S3Uploader />
+					<div {...getRootProps({
+						onClick: event => console.log(event),
+						role: 'button',
+						'aria-label': 'drag and drop area'
+					})} className="dropzone">
+						<input {...getInputProps()} />
+						<p>{uploadedFiles.length > 0 ? uploadedFiles[0].name : "Drag and drop files here or click to browse."}</p>
+					</div>
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={handleClose}>
-						Create
+					<Button variant="primary"
+						disabled={isLoading || uploadedFiles.length == 0}
+						onClick={UploadFiles}>
+						{isLoading ?
+							<>
+								<Spinner animation="border" role="status" size="sm">
+									<span className="visually-hidden">Loading...</span>
+								</Spinner> Uploading...
+							</> : 'Upload'}
 					</Button>
 				</Modal.Footer>
 			</Modal>
