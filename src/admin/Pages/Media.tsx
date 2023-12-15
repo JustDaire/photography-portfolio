@@ -7,19 +7,25 @@ const FileUpload = () => {
 	const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop: (acceptedFiles) => {
+			console.log('File:', acceptedFiles);
 			setUploadedFiles(acceptedFiles);
+			console.log('uploadedFiles:', uploadedFiles);
 			// Call your backend API endpoint to upload files
 		},
 	});
 	return (
-		<div {...getRootProps()} className="dropzone">
+		<div {...getRootProps({
+			onClick: event => console.log(event),
+			role: 'button',
+			'aria-label': 'drag and drop area'
+		})} className="dropzone">
 			<input {...getInputProps()} />
 			<p>Drag and drop files here or click to browse.</p>
-			{/* <ul>
-        {uploadedFiles.map((file: any) => (
-          <li key={file.name}>{file.name}</li>
-        ))}
-      </ul> */}
+			<ul>
+				{uploadedFiles.map((file: any) => (
+					<li key={file.name}>{file.name}</li>
+				))}
+			</ul>
 		</div>
 	);
 };
