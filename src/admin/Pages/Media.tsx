@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import Spinner from "react-bootstrap/esm/Spinner";
 import { useDropzone } from 'react-dropzone';
-import { GetFiles, GetFilesTest, S3UploadFiles, S3Uploader } from '../../utils/S3Bridge'
+import { GetFiles, GetFilesTest, S3UploadFiles, S3Uploader, S3UploaderTest } from '../../utils/S3Bridge'
 import Image from 'react-bootstrap/Image';
 
 const FileUpload = () => {
@@ -58,9 +58,9 @@ function MediaView() {
 			<div className="row no-gutters">
 				{data.map((item: any, index: number) => (
 					<div className="col-sm-4" key={index}>
-					<div className="media-thumbnail">
-						<Image src={url + item.Key} className={'img-fluid'} fluid thumbnail/>
-					</div>
+						<div className="media-thumbnail">
+							<Image src={url + item.Key} className={'img-fluid'} fluid thumbnail />
+						</div>
 					</div>
 				))}
 			</div>
@@ -72,22 +72,22 @@ function MediaNew() {
 	const [show, setShow] = useState(false);
 	const [isLoading, setLoading] = useState(false);
 
-	useEffect(() => {
-		function simulateNetworkRequest() {
-			return new Promise((resolve) => setTimeout(resolve, 5000));
-		}
+	// useEffect(() => {
+	// 	function simulateNetworkRequest() {
+	// 		return new Promise((resolve) => setTimeout(resolve, 5000));
+	// 	}
 
-		if (isLoading) {
-			simulateNetworkRequest().then(() => {
-				setLoading(false);
-			});
-		}
-	}, [isLoading]);
+	// 	if (isLoading) {
+	// 		simulateNetworkRequest().then(() => {
+	// 			setLoading(false);
+	// 		});
+	// 	}
+	// }, [isLoading]);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const handleClick = () => setLoading(true);
+	// const handleClick = () => setLoading(true);
 
 	const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 	const { getRootProps, getInputProps } = useDropzone({
@@ -98,23 +98,35 @@ function MediaNew() {
 		}
 	});
 
-	const UploadFiles = () => {
-		// setLoading(true);
-		handleClick();
-		const { loading, progress } = S3UploadFiles(uploadedFiles);
+	const UploadFiles = async () => {
+		setLoading(true);
+		// handleClick();
+		// const { loading, progress } = S3UploadFiles(uploadedFiles);
 		console.log('uploadedFiles:', uploadedFiles);
 
-		if (loading) {
-			return <p>Loading... </p>
+		const result = await S3UploaderTest(uploadedFiles[0]);
+		console.log('result:', result);
+
+		if (result == 1) {
+			console.log('Upload succeeded');
+			handleClose();
+		} else if (result == 2) {
+
 		} else {
-			console.log('Files:', progress);
+			console.log('result:', result);
 		}
-		if (!isLoading) {
-			setTimeout(() => {
-				console.log('Upload succeeded');
-				handleClose();
-			}, 3000);
-		}
+
+		// if (loading) {
+		// 	return <p>Loading... </p>
+		// } else {
+		// 	console.log('Files:', progress);
+		// }
+		// if (!isLoading) {
+		// 	setTimeout(() => {
+		// 		console.log('Upload succeeded');
+		// 		handleClose();
+		// 	}, 3000);
+		// }
 	};
 	return (
 		<>
