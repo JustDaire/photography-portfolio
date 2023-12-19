@@ -22,6 +22,14 @@ const params = {
 	Prefix: '',
 };
 
+
+const today = new Date();
+const month = today.getMonth() + 1;
+const year = today.getFullYear();
+const date = today.getDate();
+const currentDate = year + "_" + month
+	+ "_" + date + "_";
+
 export function GetFilesTest() {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState<any>([]);
@@ -34,7 +42,7 @@ export function GetFilesTest() {
 				setLoading(false);
 			} else {
 				setData(data.Contents);
-				console.log('Data:', data.Contents);
+				// console.log('Data:', data.Contents);
 				setLoading(false);
 			}
 		});
@@ -92,8 +100,6 @@ export function GetFiles() {
 	// );
 }
 
-
-
 export function S3UploadFiles(file: any) {
 	const [loading, setLoading] = useState(false);
 	// Progress
@@ -135,7 +141,7 @@ export function S3UploadFiles(file: any) {
 	return { loading, progress };
 }
 
-export function S3Uploader() {
+export function S3Uploader(newFile: any) {
 	// Progress
 	const [progress, setProgress] = useState(0);
 	// File handling
@@ -150,7 +156,8 @@ export function S3Uploader() {
 		const month = today.getMonth() + 1;
 		const year = today.getFullYear();
 		const date = today.getDate();
-		const currentDate = year + "_" + month + "_" + date + "_";
+		const currentDate = year + "_" + month
+			+ "_" + date + "_";
 
 		const params = {
 			ACL: 'public-read',
@@ -193,4 +200,60 @@ export function S3Uploader() {
 			<button onClick={() => uploadFile(selectedFile)}> Upload to S3</button>
 		</div>
 	);
+}
+
+
+// export const SS3UploaderTest = (file: any) => {
+export async function S3UploaderTest(file: any) {
+	// const [status, setStatus] = useState();
+	let status = 0;
+	console.log('status:', status);
+	// Progress
+	// const [progress, setProgress] = useState(0);
+	const today = new Date();
+	const month = today.getMonth() + 1;
+	const year = today.getFullYear();
+	const date = today.getDate();
+	const currentDate = year + "_" + month
+		+ "_" + date + "_";
+
+	const params = {
+		ACL: 'public-read',
+		Body: file,
+		Bucket: S3_BUCKET,
+		Key: currentDate + file.name,
+		maxRetries: 5
+	};
+	
+	// Upload the file to S3
+	// myBucket.upload(params, (err: any, data: any) => {
+	// 	if (err) {
+	// 		console.error("Error uploading file:", err);
+	// 		status = 2;
+	// 		return status;
+	// 	} else {
+	// 		console.log("File uploaded successfully:", data);
+	// 		status = 1;
+	// 		return status;
+
+	// 		//  Console.log
+	// 		//  {
+	// 		//    bucket: "myBucket",
+	// 		//    key: "directoryName/test-image.jpg",
+	// 		//    location: "https://myBucket.s3.amazonaws.com/directoryName/test-file.jpg"
+	// 		//  }
+	// 	}
+	// })
+
+	try {
+		const data = await myBucket.upload(params).promise()
+		console.log("File uploaded successfully:", data);
+		status = 1;
+	} catch (err) {
+		console.error("Error uploading file:", err);
+		status = 2;
+	}
+	// console.log("leave loop")
+	// console.log('status:', status);
+	return status;
 }
